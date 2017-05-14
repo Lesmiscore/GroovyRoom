@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+            android:id="@+id/activity_execution"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            tools:context="com.nao20010128nao.GroovyRoom.ExecutionActivity"
+            android:orientation="vertical">
+        <include layout="@layout/execution_compiling_bar"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/console"
+                android:typeface="monospace"
+                android:layout_weight="1" android:textIsSelectable="true"/>
+        <Button
+                android:text="@string/exit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/exitButton"/>
+
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

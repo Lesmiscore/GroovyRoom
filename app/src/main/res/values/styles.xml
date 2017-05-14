@@ -1,0 +1,37 @@
+<resources>
+
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="preferenceTheme">@style/AppTheme.Preference</item>
+    </style>
+
+    <!-- Themes for ProgressBar -->
+    <style name="AppTheme.Color1">
+        <item name="colorAccent">#f44336</item>
+    </style>
+    <style name="AppTheme.Color2">
+        <item name="colorAccent">#00bcd4</item>
+    </style>
+    <style name="AppTheme.Color3">
+        <item name="colorAccent">#8bc34a</item>
+    </style>
+    <style name="AppTheme.Color4">
+        <item name="colorAccent">#ffc107</item>
+    </style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- Themes for Views -->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <!-- Theme for Preference -->
+    <style name="AppTheme.Preference" parent="PreferenceThemeOverlay">
+
+    </style>
+</resources>

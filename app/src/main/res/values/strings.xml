@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">GroovyRoom</string>
+    <string name="type_code_here">Type code here</string>
+    <string name="new_">New</string>
+    <string name="saves">Load</string>
+    <string name="save">Save</string>
+    <string name="run">Run</string>
+    <string name="open">Open</string>
+    <string name="compiling">Compiling...</string>
+    <string name="dexing">Dexing...</string>
+    <string name="wait">Wait...</string>
+    <string name="running">Running...</string>
+
+    <string name="run_normally">Run normally</string>
+    <string name="run_config_slurper">Run as ConfigSlurper</string>
+    <string name="exit">Exit</string>
+    <string name="compilation_error">Compilation Error</string>
+    <string name="execution_error">Execution Error</string>
+
+    <string name="logcat">LogCat</string>
+    <string name="settings">Settings</string>
+
+    <string name="edit_text_insertion_list">Edit Text insertion list</string>
+    <string name="general_settings">General Settings</string>
+    <string name="settings_for_scripts">Settings for Scripts</string>
+    <string name="expose_activity">Expose Activity context for scripts</string>
+    <string name="normal_run">Normal run</string>
+    <string name="configslurper">ConfigSlurper</string>
+
+    <string name="rename">Rename</string>
+    <string name="delete">Delete</string>
+    <string name="rename_to">Rename %s to</string>
+    <string name="delete_file">Delete %s</string>
+    <string name="are_you_sure">Are yous sure?</string>
+</resources>

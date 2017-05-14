@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+            android:title="@string/settings_for_scripts">
+
+        <CheckBoxPreference
+                android:defaultValue="true"
+                android:title="@string/expose_activity"
+                android:key="exposeActivity"/>
+        <CheckBoxPreference
+                android:defaultValue="true"
+                android:title="@string/normal_run"
+                android:key="exposeActivity.normal"
+                android:dependency="exposeActivity"/>
+        <CheckBoxPreference
+                android:defaultValue="true"
+                android:title="@string/configslurper"
+                android:key="exposeActivity.configslurper"
+                android:dependency="exposeActivity"/>
+    </PreferenceCategory>
+</PreferenceScreen>
