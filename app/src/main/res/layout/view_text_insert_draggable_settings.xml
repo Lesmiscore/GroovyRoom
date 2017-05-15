@@ -40,7 +40,9 @@
             android:layout_height="match_parent"
             android:id="@+id/handle"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp"/>
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"/>
     <include
             layout="@layout/view_text_insert_label"
             android:layout_width="match_parent"
