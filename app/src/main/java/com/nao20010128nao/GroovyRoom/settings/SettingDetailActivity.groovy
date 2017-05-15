@@ -37,7 +37,7 @@ import groovy.transform.CompileStatic
  * in a {@link SettingListActivity}.
  */
 @CompileStatic
-class SettingDetailActivity extends AppCompatActivity {
+class SettingDetailActivity extends AppCompatActivity implements FragmentSwitchable{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +52,7 @@ class SettingDetailActivity extends AppCompatActivity {
 
 
         def clazz=(Class)intent.getSerializableExtra(Constants.EXTRA_FRAGMENT_CLASS)
-        def fragment=(Fragment)clazz.newInstance()
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.setting_detail_container, fragment)
-                .commit()
+        doSwitch(clazz)
     }
 
     @Override
@@ -66,5 +63,16 @@ class SettingDetailActivity extends AppCompatActivity {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    @Override
+    boolean isAllowed() { true }
+
+    @Override
+    void doSwitch(Class<? extends Fragment> clazz) {
+        def fragment=(Fragment)clazz.newInstance()
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.setting_detail_container, fragment)
+                .commit()
     }
 }

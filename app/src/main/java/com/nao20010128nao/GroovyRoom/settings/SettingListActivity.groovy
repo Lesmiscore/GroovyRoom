@@ -32,7 +32,7 @@ import com.nao20010128nao.GroovyRoom.R
 import com.nao20010128nao.GroovyRoom.VH
 import groovy.transform.CompileStatic
 
-class SettingListActivity extends AppCompatActivity {
+class SettingListActivity extends AppCompatActivity implements FragmentSwitchable{
 
     private boolean mTwoPane
 
@@ -70,6 +70,17 @@ class SettingListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item)
     }
 
+    @Override
+    boolean isAllowed() { mTwoPane }
+
+    @Override
+    void doSwitch(Class<? extends Fragment> frag) {
+        def fragment=frag.newInstance()
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.setting_detail_container, fragment)
+                .commit()
+    }
+
     class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         private final List<Item> mValues
@@ -90,10 +101,7 @@ class SettingListActivity extends AppCompatActivity {
 
             holder.view.onClickListener = {
                 if (mTwoPane) {
-                    def fragment=holder.item.fragment.newInstance()
-                    supportFragmentManager.beginTransaction()
-                            .replace(R.id.setting_detail_container, fragment)
-                            .commit()
+                    doSwitch(holder.item.fragment)
                 } else {
                     Intent intent = new Intent(SettingListActivity.this, SettingDetailActivity.class)
                     intent.putExtra(Constants.EXTRA_FRAGMENT_CLASS, holder.item.fragment)
