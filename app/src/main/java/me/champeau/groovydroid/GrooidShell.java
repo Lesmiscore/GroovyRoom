@@ -20,11 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
@@ -90,7 +86,7 @@ public class GrooidShell {
             Log.e("GrooidShell","Dynamic loading failed!",e);
             throw e;
         }
-        byte[] dalvikBytecode = new byte[0];
+        byte[] dalvikBytecode;
         try {
             dalvikBytecode = dexFile.toDex(new OutputStreamWriter(new ByteArrayOutputStream()), false);
         } catch (IOException e) {
@@ -116,7 +112,7 @@ public class GrooidShell {
                 break;
             }
         }
-        return new EvalResult(compilationTime, execTime, script);
+        return new EvalResult(compilationTime, execTime, script, new ArrayList<>(classes.values()));
     }
 
 
@@ -171,11 +167,13 @@ public class GrooidShell {
         public final long compilationTime;
         public final long execTime;
         public final Script script;
+        public final List<Class> classes;
 
-        public EvalResult(long compilationTime, long execTime, Script script) {
+        public EvalResult(long compilationTime, long execTime, Script script,List<Class> classes) {
             this.compilationTime = compilationTime;
             this.execTime = execTime;
             this.script = script;
+            this.classes = classes;
         }
     }
 
