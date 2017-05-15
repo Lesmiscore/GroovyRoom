@@ -122,7 +122,7 @@ class ExecutionActivity extends AppCompatActivity {
 
                     def output = new StringWriter()
                     def jw = new JsonWriter(output)
-                    jw.setIndent(" " * 4)
+                    jw.indent = " " * 4
                     new Gson().toJson(cs.parse(script), ConfigObject, jw)
                     jw.flush()
                     runOnUiThread {
