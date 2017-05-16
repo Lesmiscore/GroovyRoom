@@ -17,35 +17,37 @@
 package com.nao20010128nao.GroovyRoom
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.annotation.StyleRes
 import android.support.design.widget.BottomSheetDialog
 import android.support.v4.widget.NestedScrollView
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ContextThemeWrapper
 import android.support.v7.widget.Toolbar
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
-import android.view.LayoutInflater
-import android.view.View
+import android.text.style.StyleSpan
+import android.view.*
 import android.widget.FrameLayout
 import android.widget.TextView
 import com.google.gson.Gson
 import com.google.gson.stream.JsonWriter
 import com.nao20010128nao.GroovyRoom.settings.ConfigManager
-import groovy.transform.CompileStatic
 import me.champeau.groovydroid.GrooidShell
 import org.apache.commons.io.output.WriterOutputStream
 
 import static com.nao20010128nao.GroovyRoom.Constants.*
 
-@CompileStatic
 class ExecutionActivity extends AppCompatActivity {
     GrooidShell shell
     TextView console
-    def consoleLock=new Object()
+    def executionFinished=false
+    def executionInternal=[:]
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,7 @@ class ExecutionActivity extends AppCompatActivity {
                             break
                     }
                 }
+                executionInternal.result=result
                 script=result.script
                 assert script
             }catch(Throwable e){
@@ -129,6 +132,7 @@ class ExecutionActivity extends AppCompatActivity {
                         console.text = output.toString()
                     }
                 }
+                executionFinished=true
             }catch(Throwable e){
                 runOnUiThread{
                     def dialog=new ErrorDialog()
@@ -142,12 +146,87 @@ class ExecutionActivity extends AppCompatActivity {
             }
             runOnUiThread{
                 findViewById(R.id.progRoot).visibility=View.GONE
+                invalidateOptionsMenu()
             }
         }).start()
     }
 
     @Override
     void onBackPressed() {}
+
+    @Override
+    boolean onCreateOptionsMenu(Menu menu) {
+        if(executionFinished&&executionInternal.result){
+            menu.add(0,0,0,R.string.execution_information)
+        }
+        return true
+    }
+
+    @Override
+    boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.itemId){
+            case 0:
+                def result=(GrooidShell.EvalResult)executionInternal.result
+                def closures=result.classes.findAll{Closure.isAssignableFrom(it)}
+                new AlertDialog.Builder(this).with {
+                    title=R.string.execution_information
+                    def sb=new SpannableStringBuilder()
+                    sb.append(resources.getString(R.string.count_class,result.classes.size()))
+                    sb.append('\n')
+                    sb.append(resources.getString(R.string.count_closure,closures.size()))
+                    sb.append('\n'*2)
+                    sb.append(resources.getString(R.string.detail_class))
+                    result.classes.sort{a,b->a.name<=>b.name}.each {clazz->
+                        sb.append(new SpannableStringBuilder('\n'*2).with {
+                            setSpan(new AbsoluteSizeSpan(20,true),0,size(),SPAN_EXCLUSIVE_EXCLUSIVE)
+                            it
+                        })
+                        sb.append(new SpannableStringBuilder(clazz.name).with {
+                            setSpan(new StyleSpan(Typeface.BOLD),0,size(),SPAN_EXCLUSIVE_EXCLUSIVE)
+                            setSpan(new AbsoluteSizeSpan(30,true),0,size(),SPAN_EXCLUSIVE_EXCLUSIVE)
+                            it
+                        })
+                        sb.append('\n')
+                        sb.append(new SpannableStringBuilder(' extends ').with {
+                            setSpan(new StyleSpan(Typeface.ITALIC),0,size(),SPAN_EXCLUSIVE_EXCLUSIVE)
+                            it
+                        })
+                        sb.append(new SpannableStringBuilder(clazz.superclass.name).with {
+                            setSpan(new StyleSpan(Typeface.BOLD),0,size(),SPAN_EXCLUSIVE_EXCLUSIVE)
+                            it
+                        })
+                        sb.append('\n')
+                        sb.append(new SpannableStringBuilder(' implements ').with {
+                            setSpan(new StyleSpan(Typeface.ITALIC),0,size(),SPAN_EXCLUSIVE_EXCLUSIVE)
+                            it
+                        })
+                        def first=true
+                        clazz.interfaces.each {interfaze->
+                            if(first){
+                                first=false
+                            }else{
+                                sb.append(', ')
+                            }
+                            sb.append(new SpannableStringBuilder(interfaze.name).with {
+                                setSpan(new StyleSpan(Typeface.BOLD),0,size(),SPAN_EXCLUSIVE_EXCLUSIVE)
+                                it
+                            })
+                        }
+                        //sb.append('\n')
+                    }
+                    // TODO: add what I need/want
+                    message=sb
+                    show()
+                }.with {
+                    def lp=new WindowManager.LayoutParams()
+                    lp.copyFrom(window.attributes)
+                    lp.width=lp.height=WindowManager.LayoutParams.MATCH_PARENT
+                    window.attributes=lp
+                }
+                break
+        }
+        return false
+    }
 
     class ErrorDialog extends BottomSheetDialog{
         private replaceLI

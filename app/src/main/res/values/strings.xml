@@ -22,10 +22,15 @@
     <string name="save">Save</string>
     <string name="run">Run</string>
     <string name="open">Open</string>
+
     <string name="compiling">Compiling...</string>
     <string name="dexing">Dexing...</string>
     <string name="wait">Wait...</string>
     <string name="running">Running...</string>
+    <string name="execution_information">Execution information</string>
+    <string name="count_class">Count of class(es): %d</string>
+    <string name="count_closure">Count of Closure(s): %d</string>
+    <string name="detail_class">Detail of class(es)</string>
 
     <string name="run_normally">Run normally</string>
     <string name="run_config_slurper">Run as ConfigSlurper</string>
