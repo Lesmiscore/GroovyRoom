@@ -63,7 +63,7 @@ class ExecutionActivity extends AppCompatActivity {
         def code=intent.getStringExtra(EXTRA_CODE)
         def mode=intent.getStringExtra(EXTRA_MODE)
         layoutInflater.inflate(R.layout.execution_compiling_prog,progressFrame)
-        new Thread({
+        new Thread(THREAD_GROUP_EXECUTION_WORKER,{
             def swapProgress={@StyleRes int id,@StringRes int str->
                 runOnUiThread{
                     progressFrame.removeAllViews()
@@ -148,7 +148,7 @@ class ExecutionActivity extends AppCompatActivity {
                 findViewById(R.id.progRoot).visibility=View.GONE
                 invalidateOptionsMenu()
             }
-        }).start()
+        },toString(),10*1024*1024/* 10MB for stack size */).start()
     }
 
     @Override
@@ -187,7 +187,7 @@ class ExecutionActivity extends AppCompatActivity {
                             it
                         })
                         sb.append('\n')
-                        sb.append(new SpannableStringBuilder(' extends ').with {
+                        sb.append(new SpannableStringBuilder('extends ').with {
                             setSpan(new StyleSpan(Typeface.ITALIC),0,size(),SPAN_EXCLUSIVE_EXCLUSIVE)
                             it
                         })
@@ -195,22 +195,24 @@ class ExecutionActivity extends AppCompatActivity {
                             setSpan(new StyleSpan(Typeface.BOLD),0,size(),SPAN_EXCLUSIVE_EXCLUSIVE)
                             it
                         })
-                        sb.append('\n')
-                        sb.append(new SpannableStringBuilder(' implements ').with {
-                            setSpan(new StyleSpan(Typeface.ITALIC),0,size(),SPAN_EXCLUSIVE_EXCLUSIVE)
-                            it
-                        })
-                        def first=true
-                        clazz.interfaces.each {interfaze->
-                            if(first){
-                                first=false
-                            }else{
-                                sb.append(', ')
-                            }
-                            sb.append(new SpannableStringBuilder(interfaze.name).with {
-                                setSpan(new StyleSpan(Typeface.BOLD),0,size(),SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if(clazz.interfaces&&clazz.interfaces.size()) {
+                            sb.append('\n')
+                            sb.append(new SpannableStringBuilder('implements ').with {
+                                setSpan(new StyleSpan(Typeface.ITALIC), 0, size(), SPAN_EXCLUSIVE_EXCLUSIVE)
                                 it
                             })
+                            def first = true
+                            clazz.interfaces.each { interfaze ->
+                                if (first) {
+                                    first = false
+                                } else {
+                                    sb.append(', ')
+                                }
+                                sb.append(new SpannableStringBuilder(interfaze.name).with {
+                                    setSpan(new StyleSpan(Typeface.BOLD), 0, size(), SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    it
+                                })
+                            }
                         }
                         //sb.append('\n')
                     }

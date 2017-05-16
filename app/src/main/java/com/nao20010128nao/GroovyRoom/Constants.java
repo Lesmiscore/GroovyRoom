@@ -32,4 +32,6 @@ public class Constants {
     public static final String PREF_EXPOSE_ACTIVITY="exposeActivity";
     public static final String PREF_EXPOSE_ACTIVITY_NORMAL="exposeActivity.normal";
     public static final String PREF_EXPOSE_ACTIVITY_CONFIGSLURPER="exposeActivity.configslurper";
+
+    public static final ThreadGroup THREAD_GROUP_EXECUTION_WORKER=new ThreadGroup("executionWorker");
 }
