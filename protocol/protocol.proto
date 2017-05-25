@@ -1,0 +1,65 @@
+syntax = "proto2";
+
+package protocol;
+
+option java_package = "com.nao20010128nao.GroovyRoom.connection";
+option java_outer_classname = "Structures";
+
+message Execute{
+    required string code=1;
+    required Mode mode=3;
+
+    enum Mode{
+        NORMAL=1;
+        CONFIGSLURPER=2;
+        COMPILE_ONLY=3;// must be implemented as a mode
+    }
+}
+message Save{
+    required string name=1;
+    required string code=2;
+    message Reply{
+        required SaveResult result=1;
+
+        enum SaveResult{
+            OK=1;
+            NG=2;
+        }
+    }
+}
+message Load{
+    required string name=1;
+    message Reply{
+        required string code=1;
+        required bool found=2;
+    }
+}
+message List{
+    repeated string name=1;
+}
+message ConsoleText{
+    repeated TextEntry texts=1;
+
+    message TextEntry{
+        required string text=1;
+        required Type type=2;
+
+        enum Type{
+            STDOUT=1;
+            STDERR=2;
+            // following is reserved for the future use
+            LOG_VERBOSE=3;
+            LOG_DEBUG=4;
+            LOG_INFO=5;
+            LOG_WARN=6;
+            LOG_ERROR=7;
+        }
+    }
+}
+
+message Ping{
+    optional string anyString=1;
+    message Pong{
+        optional string anyString=1;
+    }
+}

@@ -53,4 +53,5 @@
     <string name="rename_to">Rename %s to</string>
     <string name="delete_file">Delete %s</string>
     <string name="are_you_sure">Are yous sure?</string>
+    <string name="control_from_your_pc">Control from your PC</string>
 </resources>

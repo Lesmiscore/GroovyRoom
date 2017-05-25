@@ -53,6 +53,8 @@ class ConfigManager {
     boolean getExposeActivityForNormalRun(){pref.getBoolean(PREF_EXPOSE_ACTIVITY,true)&&pref.getBoolean(PREF_EXPOSE_ACTIVITY_NORMAL,true)}
     boolean getExposeActivityForConfigSlurper(){pref.getBoolean(PREF_EXPOSE_ACTIVITY,true)&&pref.getBoolean(PREF_EXPOSE_ACTIVITY_CONFIGSLURPER,true)}
 
+    int getConnectionPort(){pref.getInt(PREF_CONNECTION_PORT,52789/*Random value from keyboard*/)}
+    void setConnectionPort(int value){edit().putInt(PREF_CONNECTION_PORT,value).commit()}
 
     private SharedPreferences.Editor edit(){pref.edit()}
     @Memoized private Gson getGson(){new Gson()}

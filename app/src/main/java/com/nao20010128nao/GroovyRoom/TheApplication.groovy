@@ -28,5 +28,8 @@ class TheApplication extends Application {
     void onCreate() {
         super.onCreate()
         instance=this
+
+        AndroidLoggingHandler.reset(new AndroidLoggingHandler())
+        //Logger.getLogger(NanoHTTPD.name).level = Level.FINEST
     }
 }

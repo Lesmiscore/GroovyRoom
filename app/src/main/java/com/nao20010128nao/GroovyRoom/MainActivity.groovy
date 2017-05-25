@@ -17,12 +17,14 @@
 package com.nao20010128nao.GroovyRoom
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.widget.Switch
+import com.nao20010128nao.GroovyRoom.connection.ConnectionService
 import com.nao20010128nao.GroovyRoom.settings.SettingListActivity
 import groovy.transform.CompileStatic
 
-import static com.nao20010128nao.GroovyRoom.Constants.*
+import static com.nao20010128nao.GroovyRoom.Constants.ACTION_NEW
 
 @CompileStatic
 class MainActivity extends AppCompatActivity {
@@ -43,5 +45,24 @@ class MainActivity extends AppCompatActivity {
         findViewById(R.id.settings).onClickListener={
             startActivity new Intent(this,SettingListActivity)
         }
+        ((Switch)findViewById(R.id.connectionSw)).with {
+            checked=checkConnectionServiceState()
+            onCheckedChangeListener={btn,chk->
+                if(chk){
+                    // disable->enable
+                    startService(new Intent(this,ConnectionService))
+                }else{
+                    if(ConnectionService.instance.get()){
+                        def serv=ConnectionService.instance.get()
+                        serv.server.stop()
+                        serv.server=null
+                        serv.stopSelf()
+                        serv.running=false
+                    }
+                }
+            }
+        }
     }
+
+    static boolean checkConnectionServiceState(){ConnectionService.instance.get()&&ConnectionService.instance.get().running}
 }

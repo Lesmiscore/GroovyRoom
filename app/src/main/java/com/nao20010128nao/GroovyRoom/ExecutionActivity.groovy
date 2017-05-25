@@ -61,7 +61,7 @@ class ExecutionActivity extends AppCompatActivity {
         console=(TextView)findViewById(R.id.console)
         shell=new GrooidShell(cacheDir,classLoader)
         def code=intent.getStringExtra(EXTRA_CODE)
-        def mode=intent.getStringExtra(EXTRA_MODE)
+        ExecutionMode mode= intent.getSerializableExtra(EXTRA_MODE) as ExecutionMode
         layoutInflater.inflate(R.layout.execution_compiling_prog,progressFrame)
         new Thread(THREAD_GROUP_EXECUTION_WORKER,{
             def swapProgress={@StyleRes int id,@StringRes int str->
@@ -102,7 +102,7 @@ class ExecutionActivity extends AppCompatActivity {
             errBucket.error=true
             def defOut=System.out
             def defErr=System.err
-            if(mode==EXECUTION_MODE_NORMALLY){
+            if(mode.handleOutput){
                 if(config.exposeActivityForNormalRun)
                     script.binding.setVariable('context',this)
                 script.binding.setVariable('out',outBucket)
@@ -113,24 +113,28 @@ class ExecutionActivity extends AppCompatActivity {
             }
             swapProgress(R.style.AppTheme_Color4,R.string.running)
             try {
-                if (mode == EXECUTION_MODE_NORMALLY) {
-                    script.run()
-                } else if (mode == EXECUTION_MODE_CONFIGSLURPER) {
-                    def cs=new ConfigSlurper()
-                    if(config.exposeActivityForConfigSlurper){
-                        def binding=[:]
-                        binding.context=this
-                        cs.binding=binding
-                    }
+                switch (mode.behavior){
+                    case ExecutionMode.ExecutionBehavior.DIRECT:
+                        script.run()
+                        break
+                    case ExecutionMode.ExecutionBehavior.CONFIGSLURPER:
+                        def cs=new ConfigSlurper()
+                        if(config.exposeActivityForConfigSlurper){
+                            def binding=[:]
+                            binding.context=this
+                            cs.binding=binding
+                        }
 
-                    def output = new StringWriter()
-                    def jw = new JsonWriter(output)
-                    jw.indent = " " * 4
-                    new Gson().toJson(cs.parse(script), ConfigObject, jw)
-                    jw.flush()
-                    runOnUiThread {
-                        console.text = output.toString()
-                    }
+                        def output = new StringWriter()
+                        def jw = new JsonWriter(output)
+                        jw.indent = " " * 4
+                        new Gson().toJson(cs.parse(script), ConfigObject, jw)
+                        jw.flush()
+                        runOnUiThread {
+                            console.text = output.toString()
+                        }
+                        break
+                    case ExecutionMode.ExecutionBehavior.NULL:default:break
                 }
                 executionFinished=true
             }catch(Throwable e){

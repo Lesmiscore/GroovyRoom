@@ -18,7 +18,6 @@ package com.nao20010128nao.GroovyRoom
 
 import android.view.View
 import android.view.ViewGroup
-import groovy.transform.CompileStatic
 
 /**
  * Created by nao on 2017/05/07.
@@ -44,5 +43,11 @@ class Utils {
                 }
             }
         }
+    }
+    static byte[] readBytes(InputStream is){
+        def objStrm=new BufferedInputStream(is).newObjectInputStream()
+        def buf=new byte[objStrm.readInt()]
+        objStrm.readFully(buf)
+        return buf
     }
 }

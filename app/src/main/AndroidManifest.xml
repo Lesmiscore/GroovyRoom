@@ -14,21 +14,19 @@
   ~    See the License for the specific language governing permissions and
   ~    limitations under the License.
   -->
-
-<manifest
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.nao20010128nao.GroovyRoom">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.nao20010128nao.GroovyRoom">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
+            android:name=".TheApplication"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme"
-            android:name=".TheApplication">
+            android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -58,6 +56,12 @@
                 android:label="@string/settings"
                 android:parentActivityName=".settings.SettingListActivity"
                 android:theme="@style/AppTheme.NoActionBar"/>
+
+        <service
+                android:name=".connection.ConnectionService"
+                android:enabled="true"
+                android:exported="false">
+        </service>
     </application>
 
 </manifest>

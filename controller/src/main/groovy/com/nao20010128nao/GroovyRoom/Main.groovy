@@ -14,26 +14,17 @@
  *    limitations under the License.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package com.nao20010128nao.GroovyRoom
 
-buildscript {
-    repositories {
-        jcenter()
-        maven { url "https://plugins.gradle.org/m2/" }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
-        classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.1'
-    }
+import com.nao20010128nao.GroovyRoom.connection.ConnectionClient
+import org.codehaus.groovy.runtime.InvokerHelper
+
+import java.awt.*
+
+if(GraphicsEnvironment.headless){
+    println 'Please run this on desktop environment'
+    System.exit(1)
+}else{
+    InvokerHelper.runScript(ConnectionClient,args)
 }
 
-allprojects {
-    repositories {
-        jcenter()
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}

@@ -26,12 +26,40 @@ public class Constants {
     public static final String EXTRA_CODE="code";
     public static final String EXTRA_MODE="mode";
     public static final String EXTRA_FRAGMENT_CLASS="fragment_class";
-    public static final String EXECUTION_MODE_NORMALLY="normal";
-    public static final String EXECUTION_MODE_CONFIGSLURPER="configslurper";
+    public static final ExecutionMode EXECUTION_MODE_NORMALLY=ExecutionMode.NORMALLY;
+    public static final ExecutionMode EXECUTION_MODE_CONFIGSLURPER=ExecutionMode.CONFIGSLURPER;
+    public static final ExecutionMode EXECUTION_MODE_COMPILE_ONLY=ExecutionMode.COMPILE_ONLY;
     public static final String PREF_TEXT_INSERT_STRINGS="textInsertStrings";
     public static final String PREF_EXPOSE_ACTIVITY="exposeActivity";
     public static final String PREF_EXPOSE_ACTIVITY_NORMAL="exposeActivity.normal";
     public static final String PREF_EXPOSE_ACTIVITY_CONFIGSLURPER="exposeActivity.configslurper";
+    public static final String PREF_CONNECTION_PORT="connectionPort";
 
     public static final ThreadGroup THREAD_GROUP_EXECUTION_WORKER=new ThreadGroup("executionWorker");
+
+
+    public enum ExecutionMode{
+        NORMALLY(ExecutionBehavior.DIRECT,true,false,"normal"),
+        CONFIGSLURPER(ExecutionBehavior.CONFIGSLURPER,false,true,"configslurper"),
+        COMPILE_ONLY(ExecutionBehavior.NULL,false,false,"compileonly");
+
+        public final ExecutionBehavior behavior;
+        public final boolean handleOutput,configSlurper;
+        private final String inStr;
+        ExecutionMode(ExecutionBehavior behavior,boolean handleOutput,boolean configSlurper,String inStr){
+            this.behavior=behavior;
+            this.handleOutput=handleOutput;
+            this.configSlurper=configSlurper;
+            this.inStr=inStr;
+        }
+
+        @Override
+        public String toString() {
+            return inStr;
+        }
+
+        public enum ExecutionBehavior{
+            DIRECT,CONFIGSLURPER,NULL;
+        }
+    }
 }
